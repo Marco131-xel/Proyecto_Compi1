@@ -1,0 +1,60 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #0a0a23;
+    padding: 10px;
+    text-align: center;
+    color: white;
+}
+
+nav {
+    background-color: #001243;
+    padding: 10px;
+    text-align: center; /* Centrar contenido del menú */
+}
+
+.botonMenu:hover {
+    background-color: #ffffff; 
+    color: #000000; 
+    border-radius: 6px;
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+section {
+    padding: 20px;
+}
+
+/* Centrar el menú */
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center; /* Centrar los elementos del menú */
+}
+
+nav li {
+    display: inline-block; /* Cambiar a bloque en línea para permitir centrado */
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+footer {
+    background-color: #0a0a23;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
