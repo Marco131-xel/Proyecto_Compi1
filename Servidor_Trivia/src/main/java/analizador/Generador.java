@@ -8,7 +8,7 @@ public class Generador {
     
     public static void generar(){
         try{
-            String ruta = "src/main/java/Analizadores/";
+            String ruta = "src/main/java/analizador/";
             
             System.out.println("\t********** ANALIZADOR LEXICO **********");
             String Flex[] = {ruta + "lexico.jflex", "-d", ruta};

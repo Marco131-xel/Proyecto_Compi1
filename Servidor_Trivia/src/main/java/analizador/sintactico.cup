@@ -1,0 +1,75 @@
+package analizador;
+
+//importaciones
+import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+import excepciones.Errores;
+
+// parser
+parser code
+{:
+    scanner s;
+    parser(scanner s){this.s = s;}
+
+    public LinkedList<Errores> listaErrores = new LinkedList<>();
+    
+    public void syntax_error(Symbol s){
+        listaErrores.add(new Errores("SINTACTICO RECUPERABLE",
+                        "No se esperaba el componente "+s.value,
+                        s.left,
+                        s.right));
+    }
+
+    public void unrecovered_syntax_error (Symbol s){
+        listaErrores.add(new Errores("SINTACTICO NO RECUPERABLE",
+                        "No se esperaba el componente "+s.value,
+                        s.left,
+                        s.right));
+    }
+
+:}
+
+action code
+{:
+:}
+
+// BLOQUE SIGNOS
+terminal MENOR, MAYOR, INTER, EXCLA, XSON, VERSION, IGUAL, DOSPTS;
+terminal LLAVESA, LLAVESC, CORCHEA, CORCHEC, COMA, COMID;
+
+// BLOQUE USUARIO
+terminal RESO, FINSO, USENU, DATUSE;
+terminal USUARIO, PASSWORD, NOMBRE, INSTITUCION;
+
+// BASICO
+terminal ENTERO, DECIMAL, ID, VALOR;
+
+nonterminal INICIO, INSTRUCCION, INSTRUCCIONES;
+nonterminal CABECERA, FIN;
+nonterminal USERS;
+
+start with INICIO;
+
+INICIO ::= INSTRUCCIONES;
+
+INSTRUCCIONES ::= INSTRUCCION
+                | INSTRUCCIONES INSTRUCCION;
+
+INSTRUCCION ::= USERS;
+
+CABECERA ::= MENOR INTER XSON VERSION IGUAL COMID DECIMAL COMID INTER MAYOR;                
+
+FIN ::= MENOR FINSO EXCLA MAYOR;
+
+USERS ::= CABECERA
+          MENOR EXCLA RESO DOSPTS COMID USENU COMID MAYOR
+            LLAVESA COMID DATUSE COMID DOSPTS CORCHEA 
+            LLAVESA
+                COMID USUARIO COMID DOSPTS COMID VALOR COMID COMA
+                COMID PASSWORD COMID DOSPTS COMID ENTERO COMID COMA
+                COMID NOMBRE COMID DOSPTS COMID VALOR COMID COMA
+                COMID INSTITUCION COMID DOSPTS COMID VALOR COMID
+            LLAVESC CORCHEC
+            LLAVESC
+            FIN;
+

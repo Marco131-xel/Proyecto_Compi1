@@ -49,7 +49,7 @@
             <nav>
                 <ul>
                     <li><a href="#" class="botonMenu" onclick="loadContent('./templates/Home.jsp', 'home.css'); return false;">Home</a></li>
-                    <li><a href="#" class="botonMenu" onclick="loadContent('./templates/usuario/Usuario.jsp'); return false;">Usuarios</a></li>
+                    <li><a href="#" class="botonMenu" onclick="loadContent('./templates/usuario/Usuario.jsp', 'usuario.css'); return false;">Usuarios</a></li>
                     <li><a href="#" class="botonMenu" onclick="loadContent('./templates/trivias/Trivias.jsp'); return false;">Trivias</a></li>
                     <li><a href="#" class="botonMenu" onclick="loadContent('./templates/reportes/Reportes.jsp'); return false;">Reportes</a></li>
                     <li><a href="#" class="botonMenu" onclick="loadContent('./templates/solicitud/Solicitud.jsp'); return false;">Solicitud</a></li>

@@ -6,10 +6,15 @@
     <title>Usuario</title>
 </head>
 <body>
-    <h2>Usuarios</h2>
+    <h2>Agregar Usuarios</h2>
 
     <section>
-        <!-- MENU DE OPCIONES o cualquier otro contenido -->
+        <!-- FORMULARIO PARA CARGAR ARCHIVOS -->
+        <form action="SubirArchivo" method="post" enctype="multipart/form-data">
+            <label for="archivo">Seleccione un archivo xson:</label>
+            <input type="file" name="archivo" id="archivo" accept=".xson" required>
+            <input type="submit" value="Cargar Archivo">
+        </form>
     </section>
 
 </body>
