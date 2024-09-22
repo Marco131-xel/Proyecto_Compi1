@@ -6,6 +6,15 @@
     <title>Trivias</title>
 </head>
 <body>
-    <h1>Trivia</h1>
+    <h2>Agregar Trivias</h2>
+
+    <section>
+        <!-- PARA CARGAR ARCHIVOS-->
+        <form action="SubirTrivia" method="post" enctype="multipart/form-data">
+            <label for="archivo">Seleccione un archivo xson:</label>
+            <input type="file" name="archivo" id="archivo" accept=".xson" required>
+            <input type="submit" value="Cargar Archivo">
+        </form>
+    </section>
 </body>
 </html>

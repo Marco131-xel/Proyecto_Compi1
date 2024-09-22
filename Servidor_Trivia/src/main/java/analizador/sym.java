@@ -12,12 +12,12 @@ public class sym {
   public static final int DATUSE = 19;
   public static final int COMID = 15;
   public static final int IGUAL = 8;
-  public static final int DECIMAL = 25;
+  public static final int DECIMAL = 24;
   public static final int CORCHEC = 13;
   public static final int EXCLA = 5;
   public static final int CORCHEA = 12;
   public static final int XSON = 6;
-  public static final int ID = 26;
+  public static final int ID = 25;
   public static final int COMA = 14;
   public static final int NOMBRE = 22;
   public static final int MAYOR = 3;
@@ -31,10 +31,9 @@ public class sym {
   public static final int error = 1;
   public static final int FINSO = 17;
   public static final int VERSION = 7;
-  public static final int ENTERO = 24;
   public static final int INTER = 4;
   public static final int DOSPTS = 9;
-  public static final int VALOR = 27;
+  public static final int VALOR = 26;
   public static final int RESO = 16;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -61,7 +60,6 @@ public class sym {
   "PASSWORD",
   "NOMBRE",
   "INSTITUCION",
-  "ENTERO",
   "DECIMAL",
   "ID",
   "VALOR"

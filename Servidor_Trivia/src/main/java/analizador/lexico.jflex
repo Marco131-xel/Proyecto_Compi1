@@ -62,10 +62,9 @@ INSTITUCION= "INSTITUCION"
 
 // BLOQUES BASICOS
 BLANCOS=[\ \r\t\f\n]+
-ENTERO=[0-9]+
 DECIMAL=[0-9]+"."[0-9]+
 ID=("-" | "_" | "\$") [a-zA-Z0-9]+
-VALOR=[a-zA-Z][a-zA-Z0-9_]*
+VALOR=[a-zA-Z0-9_]+
 
 %%
 
@@ -102,7 +101,6 @@ VALOR=[a-zA-Z][a-zA-Z0-9_]*
 // BASICOS
 <YYINITIAL> {ID} {return new Symbol(sym.ID, yyline, yycolumn,yytext());}
 <YYINITIAL> {VALOR} {return new Symbol(sym.VALOR, yyline, yycolumn,yytext());}
-<YYINITIAL> {ENTERO} {return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());}
 <YYINITIAL> {DECIMAL} {return new Symbol(sym.DECIMAL, yyline, yycolumn,yytext());}
 
 <YYINITIAL> {BLANCOS} {}

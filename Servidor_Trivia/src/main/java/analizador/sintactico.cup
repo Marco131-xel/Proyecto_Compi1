@@ -2,8 +2,11 @@ package analizador;
 
 //importaciones
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import excepciones.Errores;
+import datos.Usuario;
 
 // parser
 parser code
@@ -11,6 +14,8 @@ parser code
     scanner s;
     parser(scanner s){this.s = s;}
 
+    // Lista de usuarios
+    public LinkedList<Usuario> usuarios = new LinkedList<>();
     public LinkedList<Errores> listaErrores = new LinkedList<>();
     
     public void syntax_error(Symbol s){
@@ -25,6 +30,10 @@ parser code
                         "No se esperaba el componente "+s.value,
                         s.left,
                         s.right));
+    }
+
+    public LinkedList<Usuario> getUsuarios(){
+        return usuarios;
     }
 
 :}
@@ -42,7 +51,8 @@ terminal RESO, FINSO, USENU, DATUSE;
 terminal USUARIO, PASSWORD, NOMBRE, INSTITUCION;
 
 // BASICO
-terminal ENTERO, DECIMAL, ID, VALOR;
+terminal DECIMAL, ID;
+terminal String VALOR;
 
 nonterminal INICIO, INSTRUCCION, INSTRUCCIONES;
 nonterminal CABECERA, FIN;
@@ -65,11 +75,20 @@ USERS ::= CABECERA
           MENOR EXCLA RESO DOSPTS COMID USENU COMID MAYOR
             LLAVESA COMID DATUSE COMID DOSPTS CORCHEA 
             LLAVESA
-                COMID USUARIO COMID DOSPTS COMID VALOR COMID COMA
-                COMID PASSWORD COMID DOSPTS COMID ENTERO COMID COMA
-                COMID NOMBRE COMID DOSPTS COMID VALOR COMID COMA
-                COMID INSTITUCION COMID DOSPTS COMID VALOR COMID
+                COMID USUARIO COMID DOSPTS COMID VALOR:a COMID COMA
+                COMID PASSWORD COMID DOSPTS COMID VALOR:b COMID COMA
+                COMID NOMBRE COMID DOSPTS COMID VALOR:c COMID COMA
+                COMID INSTITUCION COMID DOSPTS COMID VALOR:d COMID
             LLAVESC CORCHEC
             LLAVESC
-            FIN;
+            FIN
+            {:  
+                String usuario = a;
+                String password = b;
+                String nombre = c;
+                String institucion = d;
+                
+                Usuario users = new Usuario(a, b, c, d);   
+                usuarios.add(users); 
+            :};
 

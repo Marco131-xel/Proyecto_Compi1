@@ -10,10 +10,16 @@
 
     <section>
         <!-- FORMULARIO PARA CARGAR ARCHIVOS -->
-        <form action="SubirArchivo" method="post" enctype="multipart/form-data">
+        <form action="${pageContext.request.contextPath}/Usuarios" method="post" enctype="multipart/form-data">
             <label for="archivo">Seleccione un archivo xson:</label>
             <input type="file" name="archivo" id="archivo" accept=".xson" required>
             <input type="submit" value="Cargar Archivo">
+        </form>
+    </section>
+
+    <section>
+        <form action="${pageContext.request.contextPath}/Usuarios" method="get">
+            <input type="submit" value="Ver Usuarios Ingresados">
         </form>
     </section>
 

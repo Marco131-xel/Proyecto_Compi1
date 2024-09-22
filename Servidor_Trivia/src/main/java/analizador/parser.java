@@ -6,8 +6,11 @@
 package analizador;
 
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import excepciones.Errores;
+import datos.Usuario;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -56,25 +59,25 @@ public class parser extends java_cup.runtime.lr_parser {
     "\016\030\001\002\000\004\014\031\001\002\000\004\021" +
     "\032\001\002\000\004\026\033\001\002\000\004\021\034" +
     "\001\002\000\004\013\035\001\002\000\004\021\036\001" +
-    "\002\000\004\035\037\001\002\000\004\021\040\001\002" +
+    "\002\000\004\034\037\001\002\000\004\021\040\001\002" +
     "\000\004\020\041\001\002\000\004\021\042\001\002\000" +
     "\004\027\043\001\002\000\004\021\044\001\002\000\004" +
-    "\013\045\001\002\000\004\021\046\001\002\000\004\032" +
+    "\013\045\001\002\000\004\021\046\001\002\000\004\034" +
     "\047\001\002\000\004\021\050\001\002\000\004\020\051" +
     "\001\002\000\004\021\052\001\002\000\004\030\053\001" +
     "\002\000\004\021\054\001\002\000\004\013\055\001\002" +
-    "\000\004\021\056\001\002\000\004\035\057\001\002\000" +
+    "\000\004\021\056\001\002\000\004\034\057\001\002\000" +
     "\004\021\060\001\002\000\004\020\061\001\002\000\004" +
     "\021\062\001\002\000\004\031\063\001\002\000\004\021" +
     "\064\001\002\000\004\013\065\001\002\000\004\021\066" +
-    "\001\002\000\004\035\067\001\002\000\004\021\070\001" +
+    "\001\002\000\004\034\067\001\002\000\004\021\070\001" +
     "\002\000\004\015\071\001\002\000\004\017\072\001\002" +
     "\000\004\015\073\001\002\000\004\004\075\001\002\000" +
     "\006\002\ufffa\004\ufffa\001\002\000\004\023\076\001\002" +
     "\000\004\007\077\001\002\000\004\005\100\001\002\000" +
     "\006\002\ufffb\004\ufffb\001\002\000\004\010\102\001\002" +
     "\000\004\011\103\001\002\000\004\012\104\001\002\000" +
-    "\004\021\105\001\002\000\004\033\106\001\002\000\004" +
+    "\004\021\105\001\002\000\004\032\106\001\002\000\004" +
     "\021\107\001\002\000\004\006\110\001\002\000\004\005" +
     "\111\001\002\000\004\004\ufffc\001\002\000\006\002\ufffe" +
     "\004\ufffe\001\002" });
@@ -150,6 +153,8 @@ public class parser extends java_cup.runtime.lr_parser {
     scanner s;
     parser(scanner s){this.s = s;}
 
+    // Lista de usuarios
+    public LinkedList<Usuario> usuarios = new LinkedList<>();
     public LinkedList<Errores> listaErrores = new LinkedList<>();
     
     public void syntax_error(Symbol s){
@@ -164,6 +169,10 @@ public class parser extends java_cup.runtime.lr_parser {
                         "No se esperaba el componente "+s.value,
                         s.left,
                         s.right));
+    }
+
+    public LinkedList<Usuario> getUsuarios(){
+        return usuarios;
     }
 
 
@@ -264,10 +273,30 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // USERS ::= CABECERA MENOR EXCLA RESO DOSPTS COMID USENU COMID MAYOR LLAVESA COMID DATUSE COMID DOSPTS CORCHEA LLAVESA COMID USUARIO COMID DOSPTS COMID VALOR COMID COMA COMID PASSWORD COMID DOSPTS COMID ENTERO COMID COMA COMID NOMBRE COMID DOSPTS COMID VALOR COMID COMA COMID INSTITUCION COMID DOSPTS COMID VALOR COMID LLAVESC CORCHEC LLAVESC FIN 
+          case 7: // USERS ::= CABECERA MENOR EXCLA RESO DOSPTS COMID USENU COMID MAYOR LLAVESA COMID DATUSE COMID DOSPTS CORCHEA LLAVESA COMID USUARIO COMID DOSPTS COMID VALOR COMID COMA COMID PASSWORD COMID DOSPTS COMID VALOR COMID COMA COMID NOMBRE COMID DOSPTS COMID VALOR COMID COMA COMID INSTITUCION COMID DOSPTS COMID VALOR COMID LLAVESC CORCHEC LLAVESC FIN 
             {
               Object RESULT =null;
-
+		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-29)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-29)).right;
+		String a = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-29)).value;
+		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-21)).left;
+		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-21)).right;
+		String b = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-21)).value;
+		int cleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-13)).left;
+		int cright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-13)).right;
+		String c = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-13)).value;
+		int dleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
+		int dright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
+		String d = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
+		  
+                String usuario = a;
+                String password = b;
+                String nombre = c;
+                String institucion = d;
+                
+                Usuario users = new Usuario(a, b, c, d);   
+                usuarios.add(users); 
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("USERS",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-50)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
