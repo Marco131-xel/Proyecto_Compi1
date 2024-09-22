@@ -8,51 +8,31 @@ import java.util.List;
 
 public class ArchivoXSON {
 
-    // Lee los usuarios para almacenarlos
     public static List<Usuario> leerXSON(String rutaArchivo) {
         List<Usuario> usuarios = new LinkedList<>();
         try {
-            File archivo = new File(rutaArchivo);
-            if (!archivo.exists() || archivo.length() == 0) {
-                System.out.println("El archivo XSON no existe o está vacío.");
-                return usuarios;
-            }
-
-            // Leer el archivo como String
-            BufferedReader reader = new BufferedReader(new FileReader(archivo));
+            // Lee el contenido del archivo en un String
             StringBuilder contenido = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo));
             String linea;
             while ((linea = reader.readLine()) != null) {
                 contenido.append(linea).append("\n");
             }
             reader.close();
 
-            // Verificar si el contenido está vacío
-            String contenidoStr = contenido.toString().trim();
-            if (contenidoStr.isEmpty()) {
-                System.out.println("El archivo XSON está vacío o tiene solo espacios en blanco.");
-                return usuarios;
-            }
+            // Ahora procesa el contenido con el scanner y parser
+            scanner scanner = new scanner(new java.io.StringReader(contenido.toString()));
+            parser parser = new parser(scanner);
 
-            // Usar tu analizador JFlex y CUP para procesar el contenido del archivo
-            scanner scanner = new scanner(new StringReader(contenidoStr)); // JFlex Scanner
-            parser parser = new parser(scanner);  // CUP Parser
+            parser.parse(); // Inicia el análisis
 
-            parser.parse();  // Ejecutar el análisis sintáctico
-
-            System.out.println("Contenido del archivo XSON:\n" + contenidoStr);
-
-            // Si no hubo errores, obtener la lista de usuarios
-            if (parser.listaErrores.isEmpty()) {
-                usuarios = parser.getUsuarios();
-            } else {
-                // Manejar errores si los hubiera
-                System.out.println("Errores durante el análisis del archivo XSON:");
+            if (!parser.listaErrores.isEmpty()) {
                 parser.listaErrores.forEach(error -> {
                     System.out.println(error.getDesc());
                 });
+            } else {
+                usuarios = parser.getUsuarios();
             }
-
         } catch (FileNotFoundException e) {
             System.out.println("El archivo no fue encontrado: " + e.getMessage());
         } catch (IOException e) {
@@ -69,12 +49,19 @@ public class ArchivoXSON {
         // Leer los usuarios existentes
         List<Usuario> usuariosExistentes = leerXSON(rutaArchivo);
 
-        // Añadir los nuevos usuarios
-        usuariosExistentes.addAll(nuevosUsuarios);
+        // Añadir solo los nuevos usuarios que no estén ya en la lista existente
+        for (Usuario nuevoUsuario : nuevosUsuarios) {
+            if (!usuariosExistentes.contains(nuevoUsuario)) {
+                usuariosExistentes.add(nuevoUsuario);
+            }
+        }
 
-        FileWriter writer = null;  // Declarar fuera del bloque
+        FileWriter writer = null;
         try {
-            writer = new FileWriter(rutaArchivo);
+            // Crear el archivo si no existe
+            File archivo = new File(rutaArchivo);
+            archivo.getParentFile().mkdirs(); // Crear las carpetas si no existen
+            writer = new FileWriter(archivo);
 
             // Escribir la cabecera del archivo XSON
             writer.write("<?xson version=\"1.0\" ?>\n");
@@ -100,18 +87,19 @@ public class ArchivoXSON {
             writer.write("  ]\n}");
             writer.write("\n<fin_solicitud_realizada!>");
 
+            writer.flush();
             System.out.println("Archivo guardado correctamente en: " + rutaArchivo);
-            System.out.println("Contenido guardado:\n" + usuariosExistentes.toString());
         } catch (IOException e) {
             System.out.println("Error al guardar el archivo XSON: " + e.getMessage());
-            e.printStackTrace();  // Imprimir la traza completa
+            e.printStackTrace();
         } finally {
             try {
                 if (writer != null) {
-                    writer.close();  // Asegurarse de que se cierre
+                    writer.close();
                 }
             } catch (IOException e) {
                 System.out.println("Error al cerrar el FileWriter: " + e.getMessage());
+                e.printStackTrace();
             }
         }
     }
