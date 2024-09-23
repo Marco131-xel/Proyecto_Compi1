@@ -9,6 +9,9 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/detalles.css">
     </head>
     <body>
+        <header>
+            <h1>Resultados de Usuarios Procesados</h1>
+        </header>
         <section>
             <h2>Usuarios Procesados:</h2>
             <%
@@ -16,7 +19,7 @@
 
                 if (listaUsuarios != null && !listaUsuarios.isEmpty()) {
             %>
-            <table border="1">
+            <table>
                 <thead>
                     <tr>
                         <th>Usuario</th>
@@ -47,7 +50,10 @@
             <%
                 }
             %>
+            <a href="${pageContext.request.contextPath}/Index.jsp" class="boton">Regresar a Inicio</a>
         </section>
-        <a href="${pageContext.request.contextPath}/Index.jsp" class="boton">Regresar a Inicio</a>
+        <footer>
+            <p>&copy; © 2024 Mi Empresa XD. Todos los derechos reservados.</p>
+        </footer>
     </body>
 </html>

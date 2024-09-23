@@ -4,6 +4,7 @@ import almacenar.ArchivoXSON;
 import analizador.parser;
 import analizador.scanner;
 import datos.Usuario;
+import excepciones.Errores;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -36,28 +37,30 @@ public class SubirArchivo extends HttpServlet {
         Part archivo = request.getPart("archivo");
         String contenido = new String(archivo.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
-        List<Usuario> listaUsuarios = procesarXSON(contenido);
+        // Procesar el archivo y obtener la lista de usuarios y errores
+        List<Usuario> listaUsuarios = procesarXSON(contenido, request);  // Ya enviamos el request para manejar los errores
 
-        if (listaUsuarios != null && !listaUsuarios.isEmpty()) {
-            // Ruta al archivo recovery.xson
+        if (request.getAttribute("listaErrores") != null) {
+            // Si hay errores, los pasamos al JSP de errores
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/templates/errores/ErroresUsu.jsp");
+            dispatcher.forward(request, response);
+        } else if (listaUsuarios != null && !listaUsuarios.isEmpty()) {
+            // Si no hay errores y la lista de usuarios no está vacía, guardamos los usuarios
             String rutaArchivo = getServletContext().getRealPath("/WEB-INF/data/recovery.xson");
-
-            // Guardar los usuarios en recovery.xson
             ArchivoXSON.guardarXSON(listaUsuarios, rutaArchivo);
 
-            for (Usuario usuario : listaUsuarios) {
-                System.out.println(usuario.toString());  // Verificar
-            }
+            request.setAttribute("listaUsuarios", listaUsuarios);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/templates/usuario/mostrar.jsp");
+            dispatcher.forward(request, response);
         } else {
+            // Si la lista de usuarios está vacía
             System.out.println("La lista de usuarios está vacía.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/templates/usuario/verUsuarios.jsp");
+            dispatcher.forward(request, response);
         }
-
-        request.setAttribute("listaUsuarios", listaUsuarios);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/templates/usuario/mostrar.jsp");
-        dispatcher.forward(request, response);
     }
 
-    private List<Usuario> procesarXSON(String contenido) {
+    private List<Usuario> procesarXSON(String contenido, HttpServletRequest request) {
         List<Usuario> listaUsuarios = new LinkedList<>();
         // Aquí vas a integrar tu analizador JFlex y CUP
         try {
@@ -67,13 +70,10 @@ public class SubirArchivo extends HttpServlet {
             parser.parse();  // Inicia el análisis
 
             if (!parser.listaErrores.isEmpty()) {
-                parser.listaErrores.forEach(error -> {
-                    System.out.println(error.getDesc());
-                });
-            } else {
-                listaUsuarios = parser.getUsuarios();
+                request.setAttribute("listaErrores", parser.getListaErrores());
+                return null;
             }
-
+            listaUsuarios = parser.getUsuarios();
         } catch (Exception e) {
             e.printStackTrace();
         }

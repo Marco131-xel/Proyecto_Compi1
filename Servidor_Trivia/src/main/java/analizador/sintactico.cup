@@ -36,6 +36,10 @@ parser code
         return usuarios;
     }
 
+    public LinkedList<Errores> getListaErrores() {
+    return listaErrores;
+    }
+
 :}
 
 action code
@@ -56,7 +60,7 @@ terminal String VALOR;
 
 nonterminal INICIO, INSTRUCCION, INSTRUCCIONES;
 nonterminal CABECERA, FIN;
-nonterminal USERS;
+nonterminal USERS, LISTA_USUARIOS, USUARIO_DATOS;
 
 start with INICIO;
 
@@ -74,21 +78,24 @@ FIN ::= MENOR FINSO EXCLA MAYOR;
 USERS ::= CABECERA
           MENOR EXCLA RESO DOSPTS COMID USENU COMID MAYOR
             LLAVESA COMID DATUSE COMID DOSPTS CORCHEA 
-            LLAVESA
-                COMID USUARIO COMID DOSPTS COMID VALOR:a COMID COMA
-                COMID PASSWORD COMID DOSPTS COMID VALOR:b COMID COMA
-                COMID NOMBRE COMID DOSPTS COMID VALOR:c COMID COMA
-                COMID INSTITUCION COMID DOSPTS COMID VALOR:d COMID
-            LLAVESC CORCHEC
+            LISTA_USUARIOS
+            CORCHEC
             LLAVESC
-            FIN
-            {:  
+            FIN;
+
+LISTA_USUARIOS ::= LLAVESA USUARIO_DATOS LLAVESC
+                | LLAVESA USUARIO_DATOS LLAVESC COMA LISTA_USUARIOS;
+
+USUARIO_DATOS ::= COMID USUARIO COMID DOSPTS COMID VALOR:a COMID COMA
+                  COMID PASSWORD COMID DOSPTS COMID VALOR:b COMID COMA
+                  COMID NOMBRE COMID DOSPTS COMID VALOR:c COMID COMA
+                  COMID INSTITUCION COMID DOSPTS COMID VALOR:d COMID
+            {:
                 String usuario = a;
                 String password = b;
                 String nombre = c;
                 String institucion = d;
                 
-                Usuario users = new Usuario(a, b, c, d);   
-                usuarios.add(users); 
+                Usuario users = new Usuario(usuario, password, nombre, institucion);   
+                usuarios.add(users);
             :};
-
