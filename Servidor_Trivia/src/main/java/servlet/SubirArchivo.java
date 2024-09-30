@@ -62,15 +62,18 @@ public class SubirArchivo extends HttpServlet {
 
     private List<Usuario> procesarXSON(String contenido, HttpServletRequest request) {
         List<Usuario> listaUsuarios = new LinkedList<>();
-        // Aquí vas a integrar tu analizador JFlex y CUP
+        LinkedList<Errores> listaErrores = new LinkedList<>();
         try {
             scanner scanner = new scanner(new java.io.StringReader(contenido)); // Usando JFlex Scanner
             parser parser = new parser(scanner);  // Usando CUP parser
 
             parser.parse();  // Inicia el análisis
+            
+            listaErrores.addAll(scanner.getErrores());
+            listaErrores.addAll(parser.getListaErrores());
 
-            if (!parser.listaErrores.isEmpty()) {
-                request.setAttribute("listaErrores", parser.getListaErrores());
+            if (!listaErrores.isEmpty()) {
+                request.setAttribute("listaErrores", listaErrores);
                 return null;
             }
             listaUsuarios = parser.getUsuarios();

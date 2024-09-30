@@ -600,6 +600,10 @@ public class scanner implements java_cup.runtime.Scanner {
   /* user code: */
     public LinkedList<Errores> listaErrores = new LinkedList<>();
 
+    public LinkedList<Errores> getErrores(){
+        return listaErrores;
+    }
+
 
   /**
    * Creates a new scanner
@@ -1185,7 +1189,7 @@ public class scanner implements java_cup.runtime.Scanner {
           // fall through
           case 83: break;
           case 32:
-            { return new Symbol(sym.NUVTRIV, yyline, yycolumn,yytext());
+            { return new Symbol(sym.NUVTRI, yyline, yycolumn,yytext());
             }
           // fall through
           case 84: break;

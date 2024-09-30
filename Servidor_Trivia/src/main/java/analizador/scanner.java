@@ -600,6 +600,10 @@ public class scanner implements java_cup.runtime.Scanner {
   /* user code: */
     public LinkedList<Errores> listaErrores = new LinkedList<>();
 
+    public LinkedList<Errores> getErrores(){
+        return listaErrores;
+    }
+
 
   /**
    * Creates a new scanner

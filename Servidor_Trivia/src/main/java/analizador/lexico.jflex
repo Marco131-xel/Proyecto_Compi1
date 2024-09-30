@@ -10,6 +10,10 @@ import excepciones.Errores;
 //codigo de usuario
 %{
     public LinkedList<Errores> listaErrores = new LinkedList<>();
+
+    public LinkedList<Errores> getErrores(){
+        return listaErrores;
+    }
 %}
 
 %init{
