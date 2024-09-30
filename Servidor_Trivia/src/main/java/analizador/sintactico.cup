@@ -17,6 +17,9 @@ parser code
     // Lista de usuarios
     public LinkedList<Usuario> usuarios = new LinkedList<>();
     public LinkedList<Errores> listaErrores = new LinkedList<>();
+    String usuarioAntiguo;
+    String usuarioNuevo;
+    String nuevoPassword;
     
     public void syntax_error(Symbol s){
         listaErrores.add(new Errores("SINTACTICO RECUPERABLE",
@@ -40,6 +43,18 @@ parser code
     return listaErrores;
     }
 
+    public String getUsuarioAntiguo() {
+        return usuarioAntiguo;
+    }
+
+    public String getUsuarioNuevo(){
+        return usuarioNuevo;
+    }
+
+    public String getNuevoPassword(){
+        return nuevoPassword;
+    }
+
 :}
 
 action code
@@ -51,29 +66,70 @@ terminal MENOR, MAYOR, INTER, EXCLA, XSON, VERSION, IGUAL, DOSPTS;
 terminal LLAVESA, LLAVESC, CORCHEA, CORCHEC, COMA, COMID;
 
 // BLOQUE USUARIO
-terminal RESO, FINSO, USENU, DATUSE;
+terminal RESOS, FINSOS;
+terminal RESO, FINSO, USENU, DATUSE, MODUSE;
 terminal USUARIO, PASSWORD, NOMBRE, INSTITUCION;
+terminal USEAN, NUVPASS, ELIUSE, LOGIN;
+// BLOQUE TRIVIAS
+terminal NUVTRI, PARATRIV, ELITRIV, MODITRIV;
+terminal IDTRIV, TIEMPO, TEMA;
+//BLOQUE COMPONENTES
+terminal AGRETRIV, PARACOMP, ELICOMP, MODICOMP;
+terminal IDE, TRIVIA, CLASE, TEXTO, RESPUESTA, OPCIONES,INDICE;
 
 // BASICO
-terminal DECIMAL, ID;
+terminal DECIMAL;
+terminal String ID;
 terminal String VALOR;
 
 nonterminal INICIO, INSTRUCCION, INSTRUCCIONES;
-nonterminal CABECERA, FIN;
+nonterminal MULTIPLES, CABECERA;
+nonterminal VARIAS, FIN, FINISH;
+// USUARIOS
 nonterminal USERS, LISTA_USUARIOS, USUARIO_DATOS;
+nonterminal MOD, MOD_DATOS, LISTA_MOD; 
+nonterminal ACCES, LISTA_LOGIN, LOGIN_DATOS;
+nonterminal DELETE;
+// TRIVIAS
+nonterminal TRIVIAS_DATOS, LISTA_TRIVIAS, FORMS, MOD_FORMS;
+nonterminal DELETRIV;
+// COMPONENTES
+nonterminal AGRE_COMP, LISTA_AGRE_COMP, FORMS_AGRE;
+nonterminal MOD_COMP, LISTA_MOD_COMP, FORMS_MOD;
+nonterminal DELECOMP;
 
 start with INICIO;
 
-INICIO ::= INSTRUCCIONES;
+INICIO ::= INSTRUCCIONES
+         | MULTIPLES;
 
 INSTRUCCIONES ::= INSTRUCCION
                 | INSTRUCCIONES INSTRUCCION;
 
-INSTRUCCION ::= USERS;
+MULTIPLES ::=   VARIAS
+                INSTRUCCIONES
+                FINISH;
 
-CABECERA ::= MENOR INTER XSON VERSION IGUAL COMID DECIMAL COMID INTER MAYOR;                
+INSTRUCCION ::= USERS
+              | MOD
+              | ACCES
+              | DELETE
+              | FORMS
+              | MOD_FORMS
+              | DELETRIV
+              | FORMS_AGRE
+              | FORMS_MOD
+              | DELECOMP;
+
+CABECERA ::= MENOR INTER XSON VERSION IGUAL COMID DECIMAL COMID INTER MAYOR;  
+
+VARIAS ::=  MENOR EXCLA RESOS MAYOR;
 
 FIN ::= MENOR FINSO EXCLA MAYOR;
+
+FINISH ::= MENOR FINSOS EXCLA MAYOR;
+
+/* GRAMATICA PARA USUARIOS */
 
 USERS ::= CABECERA
           MENOR EXCLA RESO DOSPTS COMID USENU COMID MAYOR
@@ -99,3 +155,147 @@ USUARIO_DATOS ::= COMID USUARIO COMID DOSPTS COMID VALOR:a COMID COMA
                 Usuario users = new Usuario(usuario, password, nombre, institucion);   
                 usuarios.add(users);
             :};
+
+MOD ::= CABECERA
+          MENOR EXCLA RESO DOSPTS COMID MODUSE COMID MAYOR
+          LLAVESA COMID DATUSE COMID DOSPTS CORCHEA 
+          LISTA_MOD
+          CORCHEC
+          LLAVESC
+          FIN;
+
+MOD_DATOS ::= COMID USEAN COMID DOSPTS COMID VALOR:a COMID COMA
+                COMID USENU COMID DOSPTS COMID VALOR:b COMID COMA
+                COMID NUVPASS COMID DOSPTS COMID VALOR:c COMID
+                {:
+                usuarioAntiguo = a;
+                usuarioNuevo = b;
+                nuevoPassword = c;
+
+            for (int i = 0; i < usuarios.size(); i++) {
+                Usuario user = usuarios.get(i);
+                if (user.getUsuario().equals(usuarioAntiguo)) {
+                // Verificar si el nuevo usuario ya existe
+                if (usuarios.stream().anyMatch(u -> u.getUsuario().equals(usuarioNuevo) && !u.getUsuario().equals(usuarioAntiguo))) {
+                // Manejar el caso donde el nuevo usuario ya existe
+                listaErrores.add(new Errores("Error de duplicado", "El usuario '" + usuarioNuevo + "' ya existe.", 0, 0));
+                break;
+                }
+                // Actualizar los atributos del usuario
+                user.setUsuario(usuarioNuevo);
+                user.setPassword(nuevoPassword);
+                break; 
+                }
+            } 
+            :};
+
+LISTA_MOD ::= LLAVESA MOD_DATOS LLAVESC
+            | LLAVESA MOD_DATOS LLAVESC COMA LISTA_MOD;
+
+LOGIN_DATOS ::= COMID USUARIO COMID DOSPTS COMID VALOR:a COMID COMA
+                COMID PASSWORD COMID DOSPTS COMID VALOR:b COMID;
+
+LISTA_LOGIN ::= LLAVESA LOGIN_DATOS LLAVESC
+             |  LLAVESA LOGIN_DATOS LLAVESC COMA LISTA_LOGIN;
+
+ACCES ::=   CABECERA
+            MENOR EXCLA RESO DOSPTS COMID LOGIN COMID MAYOR
+            LLAVESA COMID DATUSE COMID DOSPTS CORCHEA 
+            LISTA_LOGIN
+            CORCHEC
+            LLAVESC
+            FIN;
+
+DELETE ::= CABECERA
+            MENOR EXCLA RESO DOSPTS COMID ELIUSE COMID MAYOR
+            LLAVESA COMID DATUSE COMID DOSPTS CORCHEA 
+            LLAVESA
+                COMID USUARIO COMID DOSPTS COMID VALOR:a COMID
+            LLAVESC CORCHEC
+            LLAVESC
+            FIN
+        {:
+            usuarioAntiguo = a;
+        :};
+
+/* GRAMATICA PARA TRIVIAS */
+TRIVIAS_DATOS ::= COMID IDTRIV COMID DOSPTS COMID ID:a COMID COMA
+                  COMID TIEMPO COMID DOSPTS COMID VALOR:b COMID COMA
+                  COMID NOMBRE COMID DOSPTS COMID VALOR:c COMID COMA
+                  COMID TEMA COMID DOSPTS COMID VALOR:d COMID;
+
+LISTA_TRIVIAS ::= LLAVESA TRIVIAS_DATOS LLAVESC
+                | LLAVESA TRIVIAS_DATOS LLAVESC COMA LISTA_TRIVIAS;
+
+FORMS ::= CABECERA
+          MENOR EXCLA RESO DOSPTS COMID NUVTRI COMID MAYOR
+            LLAVESA COMID PARATRIV COMID DOSPTS CORCHEA 
+            LISTA_TRIVIAS
+            CORCHEC
+            LLAVESC
+            FIN;
+
+MOD_FORMS ::=   CABECERA
+                MENOR EXCLA RESO DOSPTS COMID MODITRIV COMID MAYOR
+                LLAVESA COMID PARATRIV COMID DOSPTS CORCHEA 
+                LISTA_TRIVIAS
+                CORCHEC
+                LLAVESC
+                FIN; 
+
+DELETRIV ::=    CABECERA
+                MENOR EXCLA RESO DOSPTS COMID ELITRIV COMID MAYOR
+                LLAVESA COMID PARATRIV COMID DOSPTS CORCHEA 
+                LLAVESA
+                COMID IDTRIV COMID DOSPTS COMID IDE:a COMID
+                LLAVESC CORCHEC
+                LLAVESC
+                FIN;
+
+/* GRAMATICA PARA COMPONENTES DE TRIVIAS*/
+AGRE_COMP ::=  COMID IDE COMID DOSPTS COMID ID:a COMID COMA
+               COMID TRIVIA COMID DOSPTS COMID ID:b COMID COMA
+               COMID RESPUESTA COMID DOSPTS COMID VALOR:c COMID COMA
+               COMID CLASE COMID DOSPTS COMID VALOR:d COMID COMA
+               COMID TEXTO COMID DOSPTS COMID VALOR:e COMID COMA
+               COMID OPCIONES COMID DOSPTS COMID VALOR:f COMID;
+
+LISTA_AGRE_COMP ::= LLAVESA AGRE_COMP LLAVESC
+                  | LLAVESA AGRE_COMP LLAVESC COMA LISTA_AGRE_COMP;
+
+FORMS_AGRE ::=  CABECERA
+                MENOR EXCLA RESO DOSPTS COMID AGRETRIV COMID MAYOR
+                LLAVESA COMID PARACOMP COMID DOSPTS CORCHEA 
+                LISTA_AGRE_COMP
+                CORCHEC
+                LLAVESC
+                FIN;
+
+MOD_COMP ::=    COMID IDE COMID DOSPTS COMID ID:a COMID COMA
+                COMID TRIVIA COMID DOSPTS COMID ID:b COMID COMA
+                COMID CLASE COMID DOSPTS COMID VALOR:c COMID COMA
+                COMID INDICE COMID DOSPTS COMID VALOR:d COMID COMA
+                COMID TEXTO COMID DOSPTS COMID VALOR:e COMID COMA
+                COMID OPCIONES COMID DOSPTS COMID VALOR:f COMID COMA
+                COMID RESPUESTA COMID DOSPTS COMID VALOR:G COMID;
+
+LISTA_MOD_COMP ::=  LLAVESA MOD_COMP LLAVESC
+                  | LLAVESA MOD_COMP LLAVESC COMA LISTA_MOD_COMP;
+
+FORMS_MOD ::=   CABECERA
+                MENOR EXCLA RESO DOSPTS COMID MODICOMP COMID MAYOR
+                LLAVESA COMID PARACOMP COMID DOSPTS CORCHEA 
+                LISTA_MOD_COMP
+                CORCHEC
+                LLAVESC
+                FIN;
+
+DELECOMP ::=    CABECERA
+                MENOR EXCLA RESO DOSPTS COMID ELICOMP COMID MAYOR
+                LLAVESA COMID PARACOMP COMID DOSPTS CORCHEA 
+                LLAVESA
+                COMID ID COMID DOSPTS COMID IDE:a COMID COMA
+                COMID TRIVIA COMID DOSPTS COMID IDE:b COMID
+                LLAVESC CORCHEC
+                LLAVESC
+                FIN;

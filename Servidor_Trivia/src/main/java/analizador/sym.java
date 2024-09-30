@@ -8,33 +8,58 @@ package analizador;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int MENOR = 2;
-  public static final int DATUSE = 19;
-  public static final int COMID = 15;
-  public static final int IGUAL = 8;
-  public static final int DECIMAL = 24;
-  public static final int CORCHEC = 13;
-  public static final int EXCLA = 5;
-  public static final int CORCHEA = 12;
-  public static final int XSON = 6;
-  public static final int ID = 25;
-  public static final int COMA = 14;
-  public static final int NOMBRE = 22;
-  public static final int MAYOR = 3;
-  public static final int EOF = 0;
-  public static final int INSTITUCION = 23;
-  public static final int PASSWORD = 21;
+  public static final int NUVTRI = 31;
+  public static final int ELIUSE = 29;
+  public static final int DATUSE = 21;
+  public static final int NOMBRE = 25;
   public static final int LLAVESC = 11;
-  public static final int USUARIO = 20;
-  public static final int USENU = 18;
   public static final int LLAVESA = 10;
-  public static final int error = 1;
-  public static final int FINSO = 17;
+  public static final int RESPUESTA = 46;
+  public static final int PARATRIV = 32;
+  public static final int INDICE = 48;
+  public static final int IGUAL = 8;
+  public static final int PARACOMP = 39;
+  public static final int USUARIO = 23;
+  public static final int IDTRIV = 35;
+  public static final int MODUSE = 22;
   public static final int VERSION = 7;
+  public static final int TRIVIA = 43;
+  public static final int CORCHEC = 13;
+  public static final int CORCHEA = 12;
+  public static final int ID = 50;
+  public static final int USENU = 20;
+  public static final int DECIMAL = 49;
+  public static final int EOF = 0;
+  public static final int CLASE = 44;
+  public static final int error = 1;
+  public static final int COMA = 14;
+  public static final int MENOR = 2;
+  public static final int MODITRIV = 34;
+  public static final int RESOS = 16;
+  public static final int PASSWORD = 24;
+  public static final int IDE = 42;
+  public static final int COMID = 15;
+  public static final int MAYOR = 3;
+  public static final int ELITRIV = 33;
+  public static final int TEMA = 37;
+  public static final int VALOR = 51;
+  public static final int MODICOMP = 41;
+  public static final int INSTITUCION = 26;
+  public static final int RESO = 18;
+  public static final int LOGIN = 30;
+  public static final int USEAN = 27;
+  public static final int ELICOMP = 40;
+  public static final int TIEMPO = 36;
+  public static final int FINSO = 19;
+  public static final int NUVPASS = 28;
+  public static final int FINSOS = 17;
+  public static final int TEXTO = 45;
+  public static final int XSON = 6;
   public static final int INTER = 4;
+  public static final int AGRETRIV = 38;
   public static final int DOSPTS = 9;
-  public static final int VALOR = 26;
-  public static final int RESO = 16;
+  public static final int OPCIONES = 47;
+  public static final int EXCLA = 5;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -52,14 +77,39 @@ public class sym {
   "CORCHEC",
   "COMA",
   "COMID",
+  "RESOS",
+  "FINSOS",
   "RESO",
   "FINSO",
   "USENU",
   "DATUSE",
+  "MODUSE",
   "USUARIO",
   "PASSWORD",
   "NOMBRE",
   "INSTITUCION",
+  "USEAN",
+  "NUVPASS",
+  "ELIUSE",
+  "LOGIN",
+  "NUVTRI",
+  "PARATRIV",
+  "ELITRIV",
+  "MODITRIV",
+  "IDTRIV",
+  "TIEMPO",
+  "TEMA",
+  "AGRETRIV",
+  "PARACOMP",
+  "ELICOMP",
+  "MODICOMP",
+  "IDE",
+  "TRIVIA",
+  "CLASE",
+  "TEXTO",
+  "RESPUESTA",
+  "OPCIONES",
+  "INDICE",
   "DECIMAL",
   "ID",
   "VALOR"
